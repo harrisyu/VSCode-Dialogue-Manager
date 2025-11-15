@@ -1,0 +1,63 @@
+{
+  "name": "godot-dialogue-manager-files",
+  "displayName": "Godot Dialogue Manager Files",
+  "description": "Syntax highlighting and helpers for Godot 4 Dialogue Manager .dialogue files.",
+  "version": "0.1.0",
+  "publisher": "harrisyu",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "./dist/extension.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harrisyu/VSCode-Dialogue-Manager.git"
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint \"src/**/*.ts\"",
+    "test": "echo \"No tests defined\""
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "godotDialogue",
+        "aliases": [
+          "Godot Dialogue",
+          "Godot Dialogue Manager"
+        ],
+        "extensions": [
+          ".dialogue"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "godotDialogue",
+        "scopeName": "source.godot.dialogue",
+        "path": "./syntaxes/godot-dialogue.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "godotDialogueManager.helloWorld",
+        "title": "Godot Dialogue Manager: Hello World"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/vscode": "^1.90.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.1",
+    "typescript": "^5.6.0"
+  }
+}

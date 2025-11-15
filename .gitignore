@@ -1,0 +1,8 @@
+﻿.timetracker
+node_modules
+dist
+.vscode-test
+*.vsix
+package-lock.json
+.specstory
+assets-dev

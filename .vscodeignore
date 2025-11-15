@@ -1,0 +1,16 @@
+**/.git*
+**/.DS_Store
+node_modules/**
+.vscode/
+.vscode-test/
+src/**
+scripts/**
+assets-dev/**
+test.dialogue
+tsconfig.json
+.eslintrc.json
+package-lock.json
+.specstory/**
+.cursorindexingignore
+.timetracker
+*.code-workspace

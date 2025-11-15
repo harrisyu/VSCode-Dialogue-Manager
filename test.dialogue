@@ -1,0 +1,134 @@
+# test.dialogue
+# Comprehensive sample covering Dialogue Manager features.
+# Sections are organized by feature groups to exercise syntax highlighting.
+
+using SomeGlobal
+import "res://addons/dialogue_manager/snippets.dialogue" as snippets
+
+~ start
+Nathan: Hello, this is the default start section.
+{{player}}: 我守着这边，你去那边把虫子抓了。
+- Continue => greetings
+- 再见 => END
+- Random intro => random_intro
+
+% Nathan: And then I might say this
+%2 {{npc}}: 我也许会说这个
+% 我也是随机行的最后一个选项
+
+# Section: greetings and dialogue basics
+~ greetings
+Nathan: This is me talking.
+Alice: 我会继续说这一行。
+| Coco: 并行台词一
+| Lilly: 并行台词二
+Nathan: I'll say this first.
+Nathan: Then I'll say this line.
+- Just a couple
+	[[This|Or this|Or even this]], hello world!
+	Nathan: That's not so bad.
+- A lot [if SomeGlobal.some_property > 5]
+	Nathan: Maybe you should finish one before starting another one.
+- I always finish my projects => random_intro
+
+# Section: responses with conditions and jumps
+~ response_rules
+Nathan: What would you like?
+- This one [if SomeGlobal.some_property == 0 or SomeGlobal.some_other_property == false]
+	Nathan: Ah, so you want this one?
+- Another one [if SomeGlobal.some_method()] => another_title
+- Start again => start
+- 告辞 => END
+
+~ random_intro
+% Nathan: 随机问候
+%3 Nathan: This line has a 60% chance of being picked
+%2 Nathan: This line has a 40% chance of being picked
+% {{npc}}: 我是这里的门卫，有我在，小偷进不来。
+
+# Section: conditions and mutations
+~ conditions_demo
+if SomeGlobal.some_property >= 10
+	Nathan: That property is greater than or equal to 10
+elif SomeGlobal.some_other_property == "some value"
+	Nathan: Or we might be in here.
+else
+	Nathan: If neither are true, I'll say this.
+
+match SomeGlobal.some_property
+	when 1
+		Nathan: It is 1.
+	when > 5
+		Nathan: It is less than 5 (but not 1).
+	else
+		Nathan: 它是其他的值。
+
+while SomeGlobal.some_property < 10
+	Nathan: The property is still less than 10 - specifically, it is {{SomeGlobal.some_property}}.
+	do SomeGlobal.some_property += 1
+do SomeGlobal.animate("Nathan", "Wave")
+set SomeGlobal.has_met_nathan = true
+do SomeGlobal.some_signal.emit("triggered")
+
+Nathan: I can also emit signals[do SomeGlobal.some_signal.emit()] inline.
+Nathan: I'm not sure we've met before [do wave()]I'm Nathan.
+Nathan: I have done this [if already_done]once again[/if]
+Nathan: You have {{num_apples}} [if num_apples == 1]apple[else]apples[/if], nice!
+
+# Section: wait/speed/next inline commands
+~ inline_commands
+Nathan: [wait=2]I will pause for two seconds.
+Nathan: [speed=0.5]Slow speech.
+Nathan: [next=auto]Auto advance after inferred duration.
+Nathan: [wait=["ui_accept","ui_cancel"]]Wait for actions.
+Nathan: [next="ui_accept"] Wait for action to continue.
+
+# Section: jumps and returns
+~ another_title
+Nathan: Another one?
+=>< snippets/banter
+=> END
+
+~ jump_demo
+Nathan: We'll jump soon.
+=> conditions_demo
+=>< greetings
+=> END!
+
+# Section: inline random + commands in responses
+~ response_inline_random
+- Random shout [[Hi|Hello|Howdy]] => jump_demo
+- 随机问候 [[嗨|你好|你好呀]] => jump_demo
+- [speed=2]Quick line => start
+
+# Section: tags and translations
+~ tags_translations
+Nathan: [#happy, #surprised] Oh, Hello!
+Nathan: [#mood=happy] 哦，你好！
+
+# Section: title separation
+~ group_one
+% Group 1
+% Also group 1
+
+~ group_two
+% Group 2
+% And this is also group 2
+
+# Section: dictionaries, arrays, null coalescing, functions
+~ complex_expressions
+if some_node_reference?.name == "SomeNode"
+	Nathan: Notice the "?." syntax?
+do pirate()
+do game.hello()
+set game.pirate_name = "delilah"
+do debug(game.pirate_name)
+
+# Section: translations and placeholders
+~ translation_examples
+Nathan: The value of some property is {{SomeGlobal.some_property}}.
+{{SomeGlobal.some_character_name}}: My name was provided by the player.
+
+# Section: END
+=> END
+

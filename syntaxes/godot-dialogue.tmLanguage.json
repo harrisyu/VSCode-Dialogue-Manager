@@ -1,0 +1,422 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Godot Dialogue Manager",
+  "scopeName": "source.godot.dialogue",
+  "patterns": [
+    { "include": "#sections" },
+    { "include": "#jumps" },
+    { "include": "#comments" },
+    { "include": "#inline_tags" },
+    { "include": "#random" },
+    { "include": "#responses" },
+    { "include": "#characters" },
+    { "include": "#import_statements" },
+    { "include": "#labels" },
+    { "include": "#keywords" },
+    { "include": "#operators" },
+    { "include": "#functions" },
+    { "include": "#properties" },
+    { "include": "#variables" },
+    { "include": "#interpolations" },
+    { "include": "#strings" },
+    { "include": "#numbers" }
+  ],
+  "repository": {
+    "comments": {
+      "name": "comment.line.number-sign.dialogue",
+      "match": "#.*$"
+    },
+    "inline_tags": {
+      "patterns": [
+        {
+          "name": "meta.inline-random.dialogue",
+          "begin": "\\[\\[",
+          "beginCaptures": {
+            "0": { "name": "punctuation.section.embedded.begin.dialogue" }
+          },
+          "end": "\\]\\]",
+          "endCaptures": {
+            "0": { "name": "punctuation.section.embedded.end.dialogue" }
+          },
+          "patterns": [
+            {
+              "name": "string.other.dialogue.inline-random-option",
+              "match": "[^|\\]]+"
+            },
+            {
+              "name": "punctuation.separator.or.inline-random.dialogue",
+              "match": "\\|"
+            }
+          ]
+        },
+        {
+          "name": "meta.inline-command.dialogue",
+          "begin": "\\[",
+          "beginCaptures": {
+            "0": { "name": "punctuation.section.embedded.begin.dialogue" }
+          },
+          "end": "\\]",
+          "endCaptures": {
+            "0": { "name": "punctuation.section.embedded.end.dialogue" }
+          },
+          "patterns": [
+            {
+              "name": "keyword.control.inline-command.dialogue",
+              "match": "\\b(if|else|do|end|when|match|while|set|unset)\\b"
+            },
+            {
+              "name": "support.function.builtin.inline-command.dialogue",
+              "match": "\\b(wait|speed|next)\\b"
+            },
+            {
+              "name": "support.function.dialogue",
+              "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*(?=\\s*\\()",
+              "captures": {
+                "0": { "name": "support.function.dialogue" }
+              }
+            },
+            {
+              "name": "punctuation.definition.parameters.begin.dialogue",
+              "match": "\\("
+            },
+            {
+              "name": "punctuation.definition.parameters.end.dialogue",
+              "match": "\\)"
+            },
+            { "include": "#functions" },
+            {
+              "name": "keyword.operator.assignment.dialogue",
+              "match": "="
+            },
+            {
+              "name": "constant.numeric.dialogue",
+              "match": "\\b\\d+(?:\\.\\d+)?\\b"
+            },
+            {
+              "name": "string.quoted.double.inline-command.dialogue",
+              "begin": "\"",
+              "end": "\""
+            },
+            {
+              "name": "punctuation.separator.list.inline-command.dialogue",
+              "match": ","
+            },
+            { "include": "#interpolations" },
+            {
+              "name": "variable.parameter.inline-command.dialogue",
+              "match": "[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*(?!\\s*\\()"
+            }
+          ]
+        }
+      ]
+    },
+    "sections": {
+      "name": "entity.name.section.dialogue",
+      "match": "^\\s*~\\s+.*$"
+    },
+    "jumps": {
+      "patterns": [
+        {
+          "name": "keyword.control.jump.dialogue",
+          "match": "^\\s*=>\\s*.+$"
+        },
+        {
+          "name": "keyword.control.jump.dialogue",
+          "match": "=>\\s*[A-Za-z0-9_./-]+"
+        }
+      ]
+    },
+    "characters": {
+      "patterns": [
+        {
+          "begin": "^(\\s*)([^:\\[\"\\n]+?)(:)(\\s*)",
+          "beginCaptures": {
+            "2": {
+              "patterns": [
+                { "include": "#interpolations" },
+                { "include": "#functions" },
+                {
+                  "match": ".+",
+                  "name": "entity.name.speaker.dialogue"
+                }
+              ]
+            },
+            "3": { "name": "punctuation.separator.speaker.dialogue" }
+          },
+          "end": "$",
+          "patterns": [
+            { "include": "#inline_tags" },
+            { "include": "#interpolations" },
+            { "include": "#strings" }
+          ]
+        },
+        {
+          "begin": "(?<=^\\s*%\\d*\\s*)([^:\\[\"\\n]+?)(:)(\\s*)",
+          "beginCaptures": {
+            "1": {
+              "patterns": [
+                { "include": "#interpolations" },
+                { "include": "#functions" },
+                {
+                  "match": ".+",
+                  "name": "entity.name.speaker.dialogue"
+                }
+              ]
+            },
+            "2": { "name": "punctuation.separator.speaker.dialogue" }
+          },
+          "end": "$",
+          "patterns": [
+            { "include": "#inline_tags" },
+            { "include": "#interpolations" },
+            { "include": "#strings" }
+          ]
+        }
+      ]
+    },
+    "responses": {
+      "patterns": [
+        {
+          "name": "meta.response-line.dialogue",
+          "begin": "^(\\s*)(-)(\\s+)",
+          "beginCaptures": {
+            "2": { "name": "keyword.operator.response.dialogue" }
+          },
+          "end": "$",
+          "patterns": [
+            { "include": "#inline_tags" },
+            { "include": "#jumps" },
+            { "include": "#keywords" },
+            { "include": "#properties" },
+            { "include": "#variables" },
+            { "include": "#interpolations" },
+            { "include": "#strings" },
+            {
+              "name": "markup.heading.2.response.dialogue",
+              "match": "[^\\[=]+"
+            },
+            {
+              "name": "markup.heading.2.response.dialogue",
+              "match": "."
+            }
+          ]
+        }
+      ]
+    },
+    "random": {
+      "patterns": [
+        {
+          "name": "meta.random-line.dialogue",
+          "begin": "^(\\s*)(%)(\\d*)(\\s*)",
+          "beginCaptures": {
+            "2": { "name": "keyword.operator.random.dialogue" },
+            "3": { "name": "constant.numeric.random-weight.dialogue" }
+          },
+          "end": "$",
+          "patterns": [
+            { "include": "#characters" },
+            { "include": "#jumps" },
+            { "include": "#keywords" },
+            { "include": "#properties" },
+            { "include": "#variables" },
+            { "include": "#interpolations" },
+            { "include": "#strings" },
+            {
+              "name": "markup.heading.3.random.dialogue",
+              "match": "[^\\[=]+"
+            },
+            {
+              "name": "markup.heading.3.random.dialogue",
+              "match": "."
+            }
+          ]
+        }
+      ]
+    },
+    "labels": {
+      "name": "entity.name.function.dialogue",
+      "match": "^(\\s*)(@[A-Za-z0-9_\\.]+)"
+    },
+    "keywords": {
+      "name": "keyword.control.dialogue",
+      "match": "\\b(dialogue|title|responses|response|goto|condition|if|elif|else|match|when|while|do|end|tags|character|emotion|animation|set|unset|choice|default|fallback|jump|await|using)\\b"
+    },
+    "import_statements": {
+      "patterns": [
+        {
+          "begin": "^\\s*(import)\\b",
+          "beginCaptures": {
+            "1": { "name": "keyword.control.import.dialogue" }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "name": "string.quoted.double.import-path.dialogue",
+              "begin": "\"",
+              "end": "\""
+            },
+            {
+              "name": "keyword.control.import-as.dialogue",
+              "match": "\\b(as)\\b"
+            },
+            {
+              "name": "variable.other.import-alias.dialogue",
+              "match": "\\b[A-Za-z_][A-Za-z0-9_]*\\b"
+            }
+          ]
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.assignment.dialogue",
+          "match": "(\\+=|-=|\\*=|/=|%=)"
+        },
+        {
+          "name": "keyword.operator.comparison.dialogue",
+          "match": "(?<![=])>(?![=>])|(?<![=])<(?![=<])"
+        },
+        {
+          "name": "keyword.operator.logical.dialogue",
+          "match": "(!=|==|>=|<=|&&|\\|\\|)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.dialogue",
+          "match": "(?<=\\w)(\\+|-(?!>)|\\*|/|%)(?=\\w)|(?<=\\w\\s)(\\+|-(?!>)|\\*|/|%)(?=\\s\\w)"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "meta.function-call.dialogue",
+          "begin": "(?<!\\w)([A-Za-z_][A-Za-z0-9_]*)\\s*(\\()",
+          "beginCaptures": {
+            "1": { "name": "support.function.dialogue" },
+            "2": { "name": "support.function.dialogue" }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": { "name": "support.function.dialogue" }
+          },
+          "patterns": [
+            { "include": "#interpolations" },
+            { "include": "#numbers" },
+            { "include": "#strings" },
+            {
+              "name": "variable.parameter.dialogue",
+              "match": "[A-Za-z_][A-Za-z0-9_\\.]*"
+            },
+            {
+              "name": "punctuation.separator.parameters.dialogue",
+              "match": ","
+            },
+            {
+              "name": "keyword.operator.dialogue",
+              "match": "[+\\-*/%]|==|!=|>=|<=|>|<|&&|\\|\\||!"
+            }
+          ]
+        },
+        {
+          "name": "meta.function-call.dialogue",
+          "begin": "(?<=\\.)([A-Za-z_][A-Za-z0-9_]*)\\s*(\\()",
+          "beginCaptures": {
+            "1": { "name": "support.function.dialogue" },
+            "2": { "name": "support.function.dialogue" }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": { "name": "support.function.dialogue" }
+          },
+          "patterns": [
+            { "include": "#interpolations" },
+            { "include": "#numbers" },
+            { "include": "#strings" },
+            {
+              "name": "variable.parameter.dialogue",
+              "match": "[A-Za-z_][A-Za-z0-9_\\.]*"
+            },
+            {
+              "name": "punctuation.separator.parameters.dialogue",
+              "match": ","
+            },
+            {
+              "name": "keyword.operator.dialogue",
+              "match": "[+\\-*/%]|==|!=|>=|<=|>|<|&&|\\|\\||!"
+            }
+          ]
+        }
+      ]
+    },
+    "properties": {
+      "name": "support.type.property-name.dialogue",
+      "match": "\\b(text|id|next|on_enter|on_exit|auto_advance|duration|speaker|options|command|value|when)\\b(?=\\s*[:=])"
+    },
+    "variables": {
+      "name": "variable.other.dialogue",
+      "match": "\\$[A-Za-z_][A-Za-z0-9_]*"
+    },
+    "interpolations": {
+      "name": "meta.interpolation.dialogue",
+      "begin": "\\{\\{",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.interpolation.begin.dialogue" }
+      },
+      "end": "\\}\\}",
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.interpolation.end.dialogue" }
+      },
+      "patterns": [
+        { "include": "#functions" },
+        {
+          "name": "variable.other.property.dialogue",
+          "match": "[A-Za-z_][A-Za-z0-9_]*(?:\\.[A-Za-z_][A-Za-z0-9_]*)*(?!\\s*\\()"
+        },
+        {
+          "name": "keyword.operator.dialogue",
+          "match": "[+\\-*/%]|==|!=|>=|<=|>|<|&&|\\|\\||!"
+        },
+        {
+          "name": "punctuation.separator.dialogue",
+          "match": "[.,]"
+        },
+        {
+          "name": "constant.numeric.dialogue",
+          "match": "\\b\\d+(?:\\.\\d+)?\\b"
+        },
+        {
+          "name": "keyword.operator.assignment.dialogue",
+          "match": "="
+        },
+        {
+          "name": "keyword.control.dialogue",
+          "match": "\\b(if|else|and|or|not|in)\\b"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.dialogue",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.dialogue",
+          "match": "\\\\."
+        },
+        {
+          "name": "variable.other.placeholder.dialogue",
+          "match": "\\{\\{[^}]+\\}\\}"
+        }
+      ]
+    },
+    "numbers": {
+      "name": "constant.numeric.dialogue",
+      "match": "\\b\\d+(?:\\.\\d+)?\\b"
+    }
+  },
+  "fileTypes": [
+    "dialogue"
+  ]
+}
+
